@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager_app/loginpage.dart';
-import 'package:task_manager_app/authentication.dart';
-import 'package:task_manager_app/homepage.dart';
+import 'package:task_manager_app/pages/loginpage.dart';
+import 'package:task_manager_app/services/authentication.dart';
+import 'package:task_manager_app/pages/homepage.dart';
 
 enum AuthStatus {
   NOT_DETERMINED,

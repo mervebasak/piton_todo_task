@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:task_manager_app/authentication.dart';
+import 'package:task_manager_app/services/authentication.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:task_manager_app/todo.dart';
+import 'package:task_manager_app/models/todo.dart';
 import 'dart:async';
 
 
@@ -260,6 +260,41 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
         body: showTodoList(),
+        drawer: Drawer(
+          // Add a ListView to the drawer. This ensures the user can scroll
+          // through the options in the drawer if there isn't enough vertical
+          // space to fit everything.
+          child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              DrawerHeader(
+                child: Text('Drawer Header'),
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                ),
+              ),
+              ListTile(
+                title: Text('Item 1'),
+                onTap: () {
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+              ListTile(
+                title: Text('Item 2'),
+                onTap: () {
+                  // Update the state of the app
+                  // ...
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          ),
+        ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             showAddTodoDialog(context);
