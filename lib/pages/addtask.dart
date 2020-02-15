@@ -1,5 +1,9 @@
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
+import 'package:grouped_buttons/grouped_buttons.dart';
 import '../models/user.dart';
+import 'package:intl/intl.dart' show DateFormat;
+
 
 class AddTask extends StatefulWidget {
   @override
@@ -7,6 +11,9 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
+
+  String selectedRadioButton = "";
+
   final _formKey = GlobalKey<FormState>();
   final _user = User();
 
@@ -20,12 +27,13 @@ class _AddTaskState extends State<AddTask> {
             child: Builder(
                 builder: (context) => Form(
                     key: _formKey,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                    child: ListView(
                         children: [
                           TextFormField(
                             decoration:
-                            InputDecoration(labelText: 'Title'),
+                            InputDecoration(
+                                prefixIcon: Icon(Icons.people),
+                                labelText: 'Title'),
                             validator: (value) {
                               if (value.isEmpty) {
                                 return 'Please enter title';
@@ -36,7 +44,9 @@ class _AddTaskState extends State<AddTask> {
                           ),
                           TextFormField(
                               decoration:
-                              InputDecoration(labelText: 'Description'),
+                              InputDecoration(
+                                  prefixIcon: Icon(Icons.description),
+                                  labelText: 'Description'),
                               validator: (value) {
                                 if (value.isEmpty) {
                                   return 'Please enter description';
@@ -47,39 +57,38 @@ class _AddTaskState extends State<AddTask> {
                           ),
 
                           Container(
-                            padding: const EdgeInsets.fromLTRB(0, 50, 0, 20),
-                            child: Text('Subscribe'),
+                              padding: const EdgeInsets.fromLTRB(0, 50, 0, 20),
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(Icons.date_range),
+                                  Text('   Pick Date', textAlign: TextAlign.center),
+                                ],
+                              )
                           ),
-                          SwitchListTile(
-                              title: const Text('Monthly Newsletter'),
-                              value: _user.newsletter,
-                              onChanged: (bool val) =>
-                                  setState(() => _user.newsletter = val)),
+
                           Container(
-                            padding: const EdgeInsets.fromLTRB(0, 50, 0, 20),
-                            child: Text('Priority'),
+                            child: BasicDateTimeField(),
                           ),
-                          CheckboxListTile(
-                              title: const Text('High Importance'),
-                              value: _user.priority[User.PriorityHigh],
-                              onChanged: (val) {
-                                setState(() =>
-                                _user.priority[User.PriorityMedium] = val);
-                              }),
-                          CheckboxListTile(
-                              title: const Text('Importance'),
-                              value: _user.priority[User.PriorityLow],
-                              onChanged: (val) {
-                                setState(() => _user
-                                    .priority[User.PriorityLow] = val);
-                              }),
-                          CheckboxListTile(
-                              title: const Text('Low Importance'),
-                              value: _user.priority[User.PriorityMedium],
-                              onChanged: (val) {
-                                setState(() =>
-                                _user.priority[User.PriorityMedium] = val);
-                              }),
+
+                          Container(
+                              padding: const EdgeInsets.fromLTRB(0, 50, 0, 20),
+                              child: Row(
+                                children: <Widget>[
+                                  Icon(Icons.priority_high),
+                                  Text('   Priority', textAlign: TextAlign.center),
+                                ],
+                              )
+                          ),
+                          RadioButtonGroup(
+                            labels: <String>[
+                              "High Priorty",
+                              "Medium Priorty",
+                              "Low Priorty",
+                            ],
+                            onSelected: (String selected) => setState((){
+                              selectedRadioButton = selected;
+                            }),
+                          ),
                           Container(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 16.0, horizontal: 16.0),
@@ -102,7 +111,35 @@ class _AddTaskState extends State<AddTask> {
   }
 
 }
+class BasicDateTimeField extends StatelessWidget {
+  final format = DateFormat("yyyy-MM-dd HH:mm");
 
+  String selectedDate;
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: <Widget>[
+      DateTimeField(
+        format: format,
+        onShowPicker: (context, currentValue) async {
+          final date = await showDatePicker(
+              context: context,
+              firstDate: DateTime(1900),
+              initialDate: currentValue ?? DateTime.now(),
+              lastDate: DateTime(2100));
+          if (date != null) {
+            final time = await showTimePicker(
+              context: context,
+              initialTime:
+              TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
+            );
+            selectedDate = DateTimeField.combine(date, time).toString();
+            return DateTimeField.combine(date, time);
 
-
-
+          } else {
+            return currentValue;
+          }
+        },
+      ),
+    ]);
+  }
+}
