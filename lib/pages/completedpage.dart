@@ -1,42 +1,183 @@
+import 'dart:async';
+
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager_app/pages/homepage.dart';
 
-class CompletedPage extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
+import '../models/todo.dart';
 
-    return CompletedTask();
-  }
+class CompletedPage extends StatefulWidget {
+
+  final String userId;
+
+  const CompletedPage({Key key, this.userId}) : super(key: key);
+
+
+  @override
+  State<StatefulWidget> createState() => new CompletedTask();
 }
 
+
 class CompletedTask extends State<CompletedPage> {
+  List<Todo> _todoList;
+
+  final FirebaseDatabase _database = FirebaseDatabase.instance;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  StreamSubscription<Event> _onTodoAddedSubscription;
+  StreamSubscription<Event> _onTodoChangedSubscription;
+
+  Query _todoQuery;
+
+
+  @override
+  void initState() {
+    super.initState();
+
+    _todoList = new List();
+    _todoQuery = _database
+        .reference()
+        .child("todo")
+        .orderByChild("userId");
+    _onTodoAddedSubscription = _todoQuery.onChildAdded.listen(onEntryAdded);
+    _onTodoChangedSubscription =
+        _todoQuery.onChildChanged.listen(onEntryChanged);
+  }
+
+
+  @override
+  void dispose() {
+    _onTodoAddedSubscription.cancel();
+    _onTodoChangedSubscription.cancel();
+    super.dispose();
+  }
+
+  onEntryChanged(Event event) {
+    var oldEntry = _todoList.singleWhere((entry) {
+      return entry.key == event.snapshot.key;
+    });
+
+    setState(() {
+      _todoList[_todoList.indexOf(oldEntry)] =
+          Todo.fromSnapshot(event.snapshot);
+    });
+  }
+
+  onEntryAdded(Event event) {
+    setState(() {
+      _todoList.add(Todo.fromSnapshot(event.snapshot));
+    });
+  }
+
+
+
+  updateTodo(Todo todo) {
+    //Toggle completed
+    todo.completed = !todo.completed;
+    if (todo != null) {
+      _database.reference().child("todo").child(todo.key).set(todo.toJson());
+    }
+  }
+
+  deleteTodo(String todoId, int index) {
+    _database.reference().child("todo").child(todoId).remove().then((_) {
+      print("Delete $todoId successful");
+      setState(() {
+        _todoList.removeAt(index);
+      });
+    });
+  }
+
+  listTileCheck(String radio){
+    switch(radio.substring(0,1)){
+      case 'H':
+        return CircleAvatar(
+          backgroundColor: Colors.red,
+          child: Text("H",
+            style: TextStyle(color: Colors.white),),
+        );
+        break;
+      case 'M':
+        return CircleAvatar(
+          backgroundColor: Colors.yellow,
+          child: Text("M",
+            style: TextStyle(color: Colors.white),),
+        );
+        break;
+      case 'L':
+        return CircleAvatar(
+          backgroundColor: Colors.green,
+          child: Text("L",
+            style: TextStyle(color: Colors.white),),
+        );
+        break;
+    }
+  }
+
+
+
+  Widget showTodoList() {
+    print(_todoList.length);
+    _todoList = _todoList.where((i) => i.completed).toList();
+    if (_todoList.length > 0) {
+      return ListView.builder(
+          shrinkWrap: true,
+          itemCount: _todoList.length,
+          itemBuilder: (BuildContext context, int index) {
+
+            String todoId = _todoList[index].key;
+            String title = _todoList[index].title;
+            String desc = _todoList[index].description;
+            String date = _todoList[index].date;
+            bool completed = _todoList[index].completed;
+            String userId = _todoList[index].userId;
+            String finalTitle = '$title' +"   "+ '$date';
+            return Dismissible(
+              key: Key(todoId),
+              background: Container(color: Colors.red),
+              onDismissed: (direction) async {
+                deleteTodo(todoId, index);
+              },
+              child: ListTile(
+                leading: listTileCheck(_todoList[index].priorty),
+                title: Text(
+                  finalTitle,
+                  style: TextStyle(fontSize: 20.0),
+                ),
+                subtitle: Text(desc),
+                trailing: IconButton(
+                    icon: (completed)
+                        ? Icon(
+                      Icons.done_outline,
+                      color: Colors.green,
+                      size: 20.0,
+                    )
+                        : Icon(Icons.done, color: Colors.grey, size: 20.0),
+                    onPressed: () {
+                      updateTodo(_todoList[index]);
+                    }),
+              ),
+            );
+          });
+    } else {
+      return Center(
+          child: Text(
+            "Welcome. Your list is empty",
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 30.0),
+          ));
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Completed Page'),
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('Completed Page Page'),
       ),
-      body: Center(
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    'Completed Plans',
-                    style: TextStyle(
-                        fontSize: 24,
-                        color: Colors.blueGrey,
-                        fontStyle: FontStyle.italic
-                    ),
-                  ),
-                ),
-              ]
+      body: showTodoList(),
 
-          )
-
-      ),
     );
   }
 }
-
