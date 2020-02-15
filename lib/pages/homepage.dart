@@ -97,6 +97,32 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  listTileCheck(String radio){
+    switch(radio.substring(0,1)){
+      case 'H':
+        return CircleAvatar(
+          backgroundColor: Colors.red,
+          child: Text("H",
+            style: TextStyle(color: Colors.white),),
+        );
+        break;
+      case 'M':
+        return CircleAvatar(
+          backgroundColor: Colors.yellow,
+          child: Text("M",
+            style: TextStyle(color: Colors.white),),
+        );
+        break;
+      case 'L':
+        return CircleAvatar(
+          backgroundColor: Colors.green,
+          child: Text("L",
+            style: TextStyle(color: Colors.white),),
+        );
+        break;
+    }
+  }
+
   Widget showTodoList() {
     print(_todoList.length);
     if (_todoList.length > 0) {
@@ -116,7 +142,7 @@ class _HomePageState extends State<HomePage> {
                 deleteTodo(todoId, index);
               },
               child: ListTile(
-                leading: Icon(Icons.note),
+                leading: listTileCheck(_todoList[index].priorty),
                 title: Text(
                   title,
                   style: TextStyle(fontSize: 20.0),
@@ -160,11 +186,8 @@ class _HomePageState extends State<HomePage> {
         ),
         body: showTodoList(),
         drawer: Drawer(
-          // Add a ListView to the drawer. This ensures the user can scroll
-          // through the options in the drawer if there isn't enough vertical
-          // space to fit everything.
+
           child: ListView(
-            // Important: Remove any padding from the ListView.
             padding: EdgeInsets.zero,
             children: <Widget>[
               DrawerHeader(
@@ -178,9 +201,6 @@ class _HomePageState extends State<HomePage> {
                   title: Text('Profile'),
                   leading: const Icon(Icons.email),
                   onTap: () {
-                    // Update the state of the app
-                    // ...
-                    // Then close the drawer
                     Navigator.pop(context);
                   },
                 ),
@@ -190,9 +210,6 @@ class _HomePageState extends State<HomePage> {
                   title: Text('Daily Plans'),
                   leading: const Icon(Icons.email),
                   onTap: () {
-                    // Update the state of the app
-                    // ...
-                    // Then close the drawer
                     Navigator.pop(context);
                   },
                 ),
