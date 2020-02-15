@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
         theme: new ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: new AddTask()
+        home: new RootPage(auth: new Auth())
     );
   }
 }

@@ -3,6 +3,7 @@ import 'package:task_manager_app/services/authentication.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:task_manager_app/models/todo.dart';
 import 'dart:async';
+import 'addtask.dart';
 
 
 
@@ -24,91 +25,26 @@ class _HomePageState extends State<HomePage> {
   final FirebaseDatabase _database = FirebaseDatabase.instance;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
-  final _textEditingController = TextEditingController();
   StreamSubscription<Event> _onTodoAddedSubscription;
   StreamSubscription<Event> _onTodoChangedSubscription;
 
   Query _todoQuery;
 
-  //bool _isEmailVerified = false;
 
   @override
   void initState() {
     super.initState();
 
-    //_checkEmailVerification();
-
     _todoList = new List();
     _todoQuery = _database
         .reference()
         .child("todo")
-        .orderByChild("userId")
-        .equalTo(widget.userId);
+        .orderByChild("userId");
     _onTodoAddedSubscription = _todoQuery.onChildAdded.listen(onEntryAdded);
     _onTodoChangedSubscription =
         _todoQuery.onChildChanged.listen(onEntryChanged);
   }
 
-//  void _checkEmailVerification() async {
-//    _isEmailVerified = await widget.auth.isEmailVerified();
-//    if (!_isEmailVerified) {
-//      _showVerifyEmailDialog();
-//    }
-//  }
-
-//  void _resentVerifyEmail(){
-//    widget.auth.sendEmailVerification();
-//    _showVerifyEmailSentDialog();
-//  }
-
-//  void _showVerifyEmailDialog() {
-//    showDialog(
-//      context: context,
-//      builder: (BuildContext context) {
-//        // return object of type Dialog
-//        return AlertDialog(
-//          title: new Text("Verify your account"),
-//          content: new Text("Please verify account in the link sent to email"),
-//          actions: <Widget>[
-//            new FlatButton(
-//              child: new Text("Resent link"),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//                _resentVerifyEmail();
-//              },
-//            ),
-//            new FlatButton(
-//              child: new Text("Dismiss"),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//              },
-//            ),
-//          ],
-//        );
-//      },
-//    );
-//  }
-
-//  void _showVerifyEmailSentDialog() {
-//    showDialog(
-//      context: context,
-//      builder: (BuildContext context) {
-//        // return object of type Dialog
-//        return AlertDialog(
-//          title: new Text("Verify your account"),
-//          content: new Text("Link to verify account has been sent to your email"),
-//          actions: <Widget>[
-//            new FlatButton(
-//              child: new Text("Dismiss"),
-//              onPressed: () {
-//                Navigator.of(context).pop();
-//              },
-//            ),
-//          ],
-//        );
-//      },
-//    );
-//  }
 
   @override
   void dispose() {
@@ -143,12 +79,6 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  addNewTodo(String todoItem) {
-    if (todoItem.length > 0) {
-      Todo todo = new Todo(todoItem.toString(), widget.userId, false);
-      _database.reference().child("todo").push().set(todo.toJson());
-    }
-  }
 
   updateTodo(Todo todo) {
     //Toggle completed
@@ -167,49 +97,16 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  showAddTodoDialog(BuildContext context) async {
-    _textEditingController.clear();
-    await showDialog<String>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            content: new Row(
-              children: <Widget>[
-                new Expanded(
-                    child: new TextField(
-                      controller: _textEditingController,
-                      autofocus: true,
-                      decoration: new InputDecoration(
-                        labelText: 'Add new todo',
-                      ),
-                    ))
-              ],
-            ),
-            actions: <Widget>[
-              new FlatButton(
-                  child: const Text('Cancel'),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  }),
-              new FlatButton(
-                  child: const Text('Save'),
-                  onPressed: () {
-                    addNewTodo(_textEditingController.text.toString());
-                    Navigator.pop(context);
-                  })
-            ],
-          );
-        });
-  }
-
   Widget showTodoList() {
+    print(_todoList.length);
     if (_todoList.length > 0) {
       return ListView.builder(
           shrinkWrap: true,
           itemCount: _todoList.length,
           itemBuilder: (BuildContext context, int index) {
             String todoId = _todoList[index].key;
-            String subject = _todoList[index].subject;
+            String title = _todoList[index].title;
+            String desc = _todoList[index].description;
             bool completed = _todoList[index].completed;
             String userId = _todoList[index].userId;
             return Dismissible(
@@ -219,10 +116,12 @@ class _HomePageState extends State<HomePage> {
                 deleteTodo(todoId, index);
               },
               child: ListTile(
+                leading: Icon(Icons.note),
                 title: Text(
-                  subject,
+                  title,
                   style: TextStyle(fontSize: 20.0),
                 ),
+                subtitle: Text(desc),
                 trailing: IconButton(
                     icon: (completed)
                         ? Icon(
@@ -352,7 +251,10 @@ class _HomePageState extends State<HomePage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            showAddTodoDialog(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AddTask()),
+            );
           },
           tooltip: 'Increment',
           child: Icon(Icons.add),

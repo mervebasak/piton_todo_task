@@ -1,21 +1,49 @@
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
+import '../models/todo.dart';
 import '../models/user.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
+import 'homepage.dart';
+
 
 class AddTask extends StatefulWidget {
+
+
   @override
   _AddTaskState createState() => _AddTaskState();
+
 }
 
 class _AddTaskState extends State<AddTask> {
 
+
+  final FirebaseDatabase _database = FirebaseDatabase.instance;
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+
   String selectedRadioButton = "";
+
+  final _textTitleController = TextEditingController();
+  final _textDescriptionController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   final _user = User();
+
+
+
+
+
+  addNewTodo(String title,String desc,String priorty) {
+    if (title.length > 0) {
+      Todo todo = new Todo(title.toString(), desc.toString(),priorty.toString(), HomePage().userId, false);
+      _database.reference().child("todo").push().set(todo.toJson());
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +58,7 @@ class _AddTaskState extends State<AddTask> {
                     child: ListView(
                         children: [
                           TextFormField(
+                            controller: _textTitleController,
                             decoration:
                             InputDecoration(
                                 prefixIcon: Icon(Icons.people),
@@ -43,6 +72,7 @@ class _AddTaskState extends State<AddTask> {
                                 setState(() => _user.firstName = val),
                           ),
                           TextFormField(
+                              controller: _textDescriptionController,
                               decoration:
                               InputDecoration(
                                   prefixIcon: Icon(Icons.description),
@@ -94,27 +124,19 @@ class _AddTaskState extends State<AddTask> {
                                   vertical: 16.0, horizontal: 16.0),
                               child: RaisedButton(
                                   onPressed: () {
-                                    final form = _formKey.currentState;
-                                    if (form.validate()) {
-                                      form.save();
-                                      _user.save();
-                                      _showDialog(context);
-                                    }
+                                    addNewTodo(_textTitleController.text.toString(),_textDescriptionController.text.toString(),selectedRadioButton.toString());
+                                    Navigator.pop(context);
                                   },
                                   child: Text('Add'))),
                         ])))));
   }
 
-  _showDialog(BuildContext context) {
-    Scaffold.of(context)
-        .showSnackBar(SnackBar(content: Text('Submitting form')));
-  }
 
 }
 class BasicDateTimeField extends StatelessWidget {
   final format = DateFormat("yyyy-MM-dd HH:mm");
-
   String selectedDate;
+
   @override
   Widget build(BuildContext context) {
     return Column(children: <Widget>[
