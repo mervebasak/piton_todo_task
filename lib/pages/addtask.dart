@@ -2,6 +2,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:grouped_buttons/grouped_buttons.dart';
+import 'package:task_manager_app/services/dateTimePicker.dart';
 import '../models/todo.dart';
 import '../models/user.dart';
 import 'package:intl/intl.dart' show DateFormat;
@@ -26,6 +27,7 @@ class _AddTaskState extends State<AddTask> {
 
   String selectedRadioButton = "";
 
+
   final _textTitleController = TextEditingController();
   final _textDescriptionController = TextEditingController();
 
@@ -36,9 +38,9 @@ class _AddTaskState extends State<AddTask> {
 
 
 
-  addNewTodo(String title,String desc,String priorty) {
+  addNewTodo(String title,String desc,String priorty, String date) {
     if (title.length > 0) {
-      Todo todo = new Todo(title.toString(), desc.toString(),priorty.toString(), HomePage().userId, false);
+      Todo todo = new Todo(title.toString(), desc.toString(),priorty.toString(),date.toString(), HomePage().userId, false);
       _database.reference().child("todo").push().set(todo.toJson());
     }
   }
@@ -124,7 +126,10 @@ class _AddTaskState extends State<AddTask> {
                                   vertical: 16.0, horizontal: 16.0),
                               child: RaisedButton(
                                   onPressed: () {
-                                    addNewTodo(_textTitleController.text.toString(),_textDescriptionController.text.toString(),selectedRadioButton.toString());
+                                    addNewTodo(_textTitleController.text.toString(),
+                                        _textDescriptionController.text.toString(),
+                                        selectedRadioButton.toString(),
+                                        selectedDate);
                                     Navigator.pop(context);
                                   },
                                   child: Text('Add'))),
@@ -132,36 +137,4 @@ class _AddTaskState extends State<AddTask> {
   }
 
 
-}
-class BasicDateTimeField extends StatelessWidget {
-  final format = DateFormat("yyyy-MM-dd HH:mm");
-  String selectedDate;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      DateTimeField(
-        format: format,
-        onShowPicker: (context, currentValue) async {
-          final date = await showDatePicker(
-              context: context,
-              firstDate: DateTime(1900),
-              initialDate: currentValue ?? DateTime.now(),
-              lastDate: DateTime(2100));
-          if (date != null) {
-            final time = await showTimePicker(
-              context: context,
-              initialTime:
-              TimeOfDay.fromDateTime(currentValue ?? DateTime.now()),
-            );
-            selectedDate = DateTimeField.combine(date, time).toString();
-            return DateTimeField.combine(date, time);
-
-          } else {
-            return currentValue;
-          }
-        },
-      ),
-    ]);
-  }
 }

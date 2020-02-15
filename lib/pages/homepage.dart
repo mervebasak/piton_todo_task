@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager_app/pages/weeklypage.dart';
 import 'package:task_manager_app/services/authentication.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:task_manager_app/models/todo.dart';
 import 'dart:async';
 import 'addtask.dart';
+import 'completedpage.dart';
+import 'dailypage.dart';
+import 'monthlypage.dart';
 
 
 
@@ -123,6 +127,8 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+
+
   Widget showTodoList() {
     print(_todoList.length);
     if (_todoList.length > 0) {
@@ -130,11 +136,14 @@ class _HomePageState extends State<HomePage> {
           shrinkWrap: true,
           itemCount: _todoList.length,
           itemBuilder: (BuildContext context, int index) {
+
             String todoId = _todoList[index].key;
             String title = _todoList[index].title;
             String desc = _todoList[index].description;
+            String date = _todoList[index].date;
             bool completed = _todoList[index].completed;
             String userId = _todoList[index].userId;
+            String finalTitle = '$title' +"   "+ '$date';
             return Dismissible(
               key: Key(todoId),
               background: Container(color: Colors.red),
@@ -144,7 +153,7 @@ class _HomePageState extends State<HomePage> {
               child: ListTile(
                 leading: listTileCheck(_todoList[index].priorty),
                 title: Text(
-                  title,
+                  finalTitle,
                   style: TextStyle(fontSize: 20.0),
                 ),
                 subtitle: Text(desc),
@@ -205,6 +214,11 @@ class _HomePageState extends State<HomePage> {
                   leading: const Icon(Icons.today),
                   onTap: () {
                     Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => DailyPage()),
+                    );
+
                   },
                 ),
               ),
@@ -213,10 +227,11 @@ class _HomePageState extends State<HomePage> {
                   title: Text('Weekly Plans'),
                   leading: const Icon(Icons.insert_invitation),
                   onTap: () {
-                    // Update the state of the app
-                    // ...
-                    // Then close the drawer
                     Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => WeeklyPage()),
+                    );
                   },
                 ),
               ),
@@ -225,10 +240,11 @@ class _HomePageState extends State<HomePage> {
                   title: Text('Monthly Plans'),
                   leading: const Icon(Icons.calendar_today),
                   onTap: () {
-                    // Update the state of the app
-                    // ...
-                    // Then close the drawer
                     Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MonthlyPage()),
+                    );
                   },
                 ),
               ),
@@ -237,10 +253,11 @@ class _HomePageState extends State<HomePage> {
                   title: Text('Completed Plans'),
                   leading: const Icon(Icons.check_circle),
                   onTap: () {
-                    // Update the state of the app
-                    // ...
-                    // Then close the drawer
                     Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => CompletedPage()),
+                    );
                   },
                 ),
               ),

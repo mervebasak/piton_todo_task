@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager_app/pages/addtask.dart';
+import 'package:task_manager_app/pages/dailypage.dart';
 import 'package:task_manager_app/pages/rootpage.dart';
 import 'package:task_manager_app/services/authentication.dart';
 import 'pages/loginpage.dart';

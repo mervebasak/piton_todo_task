@@ -7,8 +7,9 @@ class Todo {
   String userId;
   String description;
   String priorty;
+  String date;
 
-  Todo(this.title,this.description,this.priorty,this.userId, this.completed);
+  Todo(this.title,this.description,this.priorty,this.date,this.userId, this.completed);
 
   Todo.fromSnapshot(DataSnapshot snapshot) :
         key = snapshot.key,
@@ -16,6 +17,7 @@ class Todo {
         title = snapshot.value["title"],
         description = snapshot.value["description"],
         priorty = snapshot.value["priorty"],
+        date = snapshot.value["date"],
         completed = snapshot.value["completed"];
 
   toJson() {
@@ -24,6 +26,7 @@ class Todo {
       "title": title,
       "description": description,
       "priorty": priorty,
+      "date": date,
       "completed": completed,
     };
   }
