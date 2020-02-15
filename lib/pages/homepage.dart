@@ -176,7 +176,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
         appBar: new AppBar(
-          title: new Text('Flutter login demo'),
+          title: new Text('Home Page '),
           actions: <Widget>[
             new FlatButton(
                 child: new Text('Logout',
@@ -191,24 +191,18 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.zero,
             children: <Widget>[
               DrawerHeader(
-                child: Text('Drawer Header'),
+                child: Text('Menu', style: TextStyle(fontSize: 40.0), textAlign: TextAlign.center,
+                ),
+
                 decoration: BoxDecoration(
                   color: Colors.blue,
                 ),
               ),
-              Card(
-                child: ListTile(
-                  title: Text('Profile'),
-                  leading: const Icon(Icons.email),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
+
               Card(
                 child: ListTile(
                   title: Text('Daily Plans'),
-                  leading: const Icon(Icons.email),
+                  leading: const Icon(Icons.today),
                   onTap: () {
                     Navigator.pop(context);
                   },
@@ -217,7 +211,7 @@ class _HomePageState extends State<HomePage> {
               Card(
                 child: ListTile(
                   title: Text('Weekly Plans'),
-                  leading: const Icon(Icons.email),
+                  leading: const Icon(Icons.insert_invitation),
                   onTap: () {
                     // Update the state of the app
                     // ...
@@ -229,7 +223,7 @@ class _HomePageState extends State<HomePage> {
               Card(
                 child: ListTile(
                   title: Text('Monthly Plans'),
-                  leading: const Icon(Icons.email),
+                  leading: const Icon(Icons.calendar_today),
                   onTap: () {
                     // Update the state of the app
                     // ...
@@ -241,7 +235,7 @@ class _HomePageState extends State<HomePage> {
               Card(
                 child: ListTile(
                   title: Text('Completed Plans'),
-                  leading: const Icon(Icons.email),
+                  leading: const Icon(Icons.check_circle),
                   onTap: () {
                     // Update the state of the app
                     // ...
@@ -250,18 +244,7 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-              Card(
-                child: ListTile(
-                  title: Text('Logout'),
-                  leading: const Icon(Icons.email),
-                  onTap: () {
-                    // Update the state of the app
-                    // ...
-                    // Then close the drawer
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
+
 
             ],
           ),
