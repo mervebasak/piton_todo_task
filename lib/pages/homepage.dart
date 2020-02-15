@@ -274,24 +274,79 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.blue,
                 ),
               ),
-              ListTile(
-                title: Text('Item 1'),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
+              Card(
+                child: ListTile(
+                  title: Text('Profile'),
+                  leading: const Icon(Icons.email),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+                    Navigator.pop(context);
+                  },
+                ),
               ),
-              ListTile(
-                title: Text('Item 2'),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
+              Card(
+                child: ListTile(
+                  title: Text('Daily Plans'),
+                  leading: const Icon(Icons.email),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+                    Navigator.pop(context);
+                  },
+                ),
               ),
+              Card(
+                child: ListTile(
+                  title: Text('Weekly Plans'),
+                  leading: const Icon(Icons.email),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  title: Text('Monthly Plans'),
+                  leading: const Icon(Icons.email),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  title: Text('Completed Plans'),
+                  leading: const Icon(Icons.email),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+              Card(
+                child: ListTile(
+                  title: Text('Logout'),
+                  leading: const Icon(Icons.email),
+                  onTap: () {
+                    // Update the state of the app
+                    // ...
+                    // Then close the drawer
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+
             ],
           ),
         ),

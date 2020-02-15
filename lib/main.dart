@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_manager_app/pages/addtask.dart';
 import 'package:task_manager_app/pages/rootpage.dart';
 import 'package:task_manager_app/services/authentication.dart';
 import 'pages/loginpage.dart';
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
         theme: new ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: new RootPage(auth: new Auth())
+        home: new AddTask()
     );
   }
 }
