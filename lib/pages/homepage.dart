@@ -202,7 +202,6 @@ class _HomePageState extends State<HomePage> {
               DrawerHeader(
                 child: Text('Menu', style: TextStyle(fontSize: 40.0), textAlign: TextAlign.center,
                 ),
-
                 decoration: BoxDecoration(
                   color: Colors.blue,
                 ),

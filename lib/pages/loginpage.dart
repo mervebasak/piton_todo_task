@@ -1,3 +1,4 @@
+import 'package:assorted_layout_widgets/assorted_layout_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:task_manager_app/services/authentication.dart';
 
@@ -142,9 +143,36 @@ class _LoginPageState extends State<LoginPage> {
           child: new ListView(
             shrinkWrap: true,
             children: <Widget>[
-              showLogo(),
-              showEmailInput(),
-              showPasswordInput(),
+              ColumnSuper(
+                  invert: true,
+                  innerDistance: -70.0,
+                  children: [
+                    showLogo(),
+                    Container(
+                      padding: EdgeInsets.only(left:24.0, right: 24.0),
+                      margin: const EdgeInsets.only(top: 20.0),
+                      decoration: new BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Colors.white,
+                          boxShadow: [
+                            new BoxShadow(
+                              color: Colors.blueGrey,
+                              blurRadius: 10.0,
+                            ),
+                          ]),
+                      child: Column(
+                        children: [
+                          Container(
+                            child: showEmailInput(),
+                          ),
+                          Container(
+                            margin: const EdgeInsets.only(bottom: 90.0),
+                            child: showPasswordInput(),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]),
               showPrimaryButton(),
               showSecondaryButton(),
               showErrorMessage(),
@@ -174,19 +202,18 @@ class _LoginPageState extends State<LoginPage> {
     return new Hero(
       tag: 'hero',
       child: Padding(
-        padding: EdgeInsets.fromLTRB(0.0, 70.0, 0.0, 0.0),
-        child: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          radius: 48.0,
-          child: Image.asset('assets/piton.jpg'),
-        ),
+        padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+        child: Container(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.width -200,
+            child: Image.asset('assets/image_01.png')),
       ),
     );
   }
 
   Widget showEmailInput() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 100.0, 0.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(0.0, 50.0, 0.0, 0.0),
       child: new TextFormField(
         maxLines: 1,
         keyboardType: TextInputType.emailAddress,
@@ -197,7 +224,6 @@ class _LoginPageState extends State<LoginPage> {
               Icons.mail,
               color: Colors.grey,
             )),
-
         validator: (value) => value.isEmpty ? 'Email can\'t be empty' : null,
         onSaved: (value) => _email = value.trim(),
       ),
@@ -206,7 +232,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget showPasswordInput() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0.0, 15.0, 0.0, 0.0),
+      padding: const EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 0.0),
       child: new TextFormField(
         maxLines: 1,
         obscureText: true,
