@@ -112,7 +112,6 @@ class DailyTask extends State<DailyPage> {
     }
   }
 
-
   Widget showTodoList() {
     List _dailyToDo = new List();
     print(_todoList.length);
@@ -134,40 +133,52 @@ class DailyTask extends State<DailyPage> {
     if (_dailyToDo.length > 0) {
       return ListView.builder(
           shrinkWrap: true,
-          itemCount: _dailyToDo.length,
+          itemCount: _todoList.length,
           itemBuilder: (BuildContext context, int index) {
-
-            String todoId = _dailyToDo[index].key;
-            String title = _dailyToDo[index].title;
-            String desc = _dailyToDo[index].description;
-            String date = _dailyToDo[index].date;
-            bool completed = _dailyToDo[index].completed;
-            String userId = _dailyToDo[index].userId;
-            String finalTitle = '$title' +"   "+ '$date';
+            String todoId = _todoList[index].key;
+            String title = _todoList[index].title;
+            String desc = _todoList[index].description;
+            String date = _todoList[index].date;
+            bool completed = _todoList[index].completed;
+            String userId = _todoList[index].userId;
             return Dismissible(
               key: Key(todoId),
               background: Container(color: Colors.red),
               onDismissed: (direction) async {
                 deleteTodo(todoId, index);
               },
-              child: ListTile(
-                leading: listTileCheck(_dailyToDo[index].priorty),
-                title: Text(
-                  finalTitle,
-                  style: TextStyle(fontSize: 20.0),
-                ),
-                subtitle: Text(desc),
-                trailing: IconButton(
-                    icon: (completed)
-                        ? Icon(
-                      Icons.done_outline,
-                      color: Colors.green,
-                      size: 20.0,
-                    )
-                        : Icon(Icons.done, color: Colors.grey, size: 20.0),
-                    onPressed: () {
-                      updateTodo(_dailyToDo[index]);
-                    }),
+              child: Card(
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      ListTile(
+                        leading: listTileCheck(_todoList[index].priorty),
+                        title: Text(
+                          title,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        subtitle: Text(desc),
+                      ),
+                      ButtonBar(
+                        children: <Widget>[
+                          FlatButton(
+                            child:  Text(date),
+                            onPressed: () { /* ... */ },
+                          ),
+                          IconButton(
+                              icon: (completed)
+                                  ? Icon(
+                                Icons.done_outline,
+                                color: Colors.green,
+                                size: 20.0,
+                              )
+                                  : Icon(Icons.done, color: Colors.grey, size: 20.0),
+                              onPressed: () {
+                                updateTodo(_todoList[index]);
+                              }),
+                        ],
+                      ),
+                    ]),
               ),
             );
           });

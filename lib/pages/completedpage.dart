@@ -124,38 +124,50 @@ class CompletedTask extends State<CompletedPage> {
           shrinkWrap: true,
           itemCount: _todoList.length,
           itemBuilder: (BuildContext context, int index) {
-
             String todoId = _todoList[index].key;
             String title = _todoList[index].title;
             String desc = _todoList[index].description;
             String date = _todoList[index].date;
             bool completed = _todoList[index].completed;
             String userId = _todoList[index].userId;
-            String finalTitle = '$title' +"   "+ '$date';
             return Dismissible(
               key: Key(todoId),
               background: Container(color: Colors.red),
               onDismissed: (direction) async {
                 deleteTodo(todoId, index);
               },
-              child: ListTile(
-                leading: listTileCheck(_todoList[index].priorty),
-                title: Text(
-                  finalTitle,
-                  style: TextStyle(fontSize: 20.0),
-                ),
-                subtitle: Text(desc),
-                trailing: IconButton(
-                    icon: (completed)
-                        ? Icon(
-                      Icons.done_outline,
-                      color: Colors.green,
-                      size: 20.0,
-                    )
-                        : Icon(Icons.done, color: Colors.grey, size: 20.0),
-                    onPressed: () {
-                      updateTodo(_todoList[index]);
-                    }),
+              child: Card(
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      ListTile(
+                        leading: listTileCheck(_todoList[index].priorty),
+                        title: Text(
+                          title,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        subtitle: Text(desc),
+                      ),
+                      ButtonBar(
+                        children: <Widget>[
+                          FlatButton(
+                            child:  Text(date),
+                            onPressed: () { /* ... */ },
+                          ),
+                          IconButton(
+                              icon: (completed)
+                                  ? Icon(
+                                Icons.done_outline,
+                                color: Colors.green,
+                                size: 20.0,
+                              )
+                                  : Icon(Icons.done, color: Colors.grey, size: 20.0),
+                              onPressed: () {
+                                updateTodo(_todoList[index]);
+                              }),
+                        ],
+                      ),
+                    ]),
               ),
             );
           });
@@ -174,7 +186,7 @@ class CompletedTask extends State<CompletedPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Completed Page Page'),
+        title: new Text('Completed Plans Page'),
       ),
       body: showTodoList(),
 

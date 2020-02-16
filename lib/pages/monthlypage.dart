@@ -138,40 +138,52 @@ class MonthlyTask extends State<MonthlyPage> {
     if (_monthlyToDo.length > 0) {
       return ListView.builder(
           shrinkWrap: true,
-          itemCount: _monthlyToDo.length,
+          itemCount: _todoList.length,
           itemBuilder: (BuildContext context, int index) {
-
-            String todoId = _monthlyToDo[index].key;
-            String title = _monthlyToDo[index].title;
-            String desc = _monthlyToDo[index].description;
-            String date = _monthlyToDo[index].date;
-            bool completed = _monthlyToDo[index].completed;
-            String userId = _monthlyToDo[index].userId;
-            String finalTitle = '$title' +"   "+ '$date';
+            String todoId = _todoList[index].key;
+            String title = _todoList[index].title;
+            String desc = _todoList[index].description;
+            String date = _todoList[index].date;
+            bool completed = _todoList[index].completed;
+            String userId = _todoList[index].userId;
             return Dismissible(
               key: Key(todoId),
               background: Container(color: Colors.red),
               onDismissed: (direction) async {
                 deleteTodo(todoId, index);
               },
-              child: ListTile(
-                leading: listTileCheck(_monthlyToDo[index].priorty),
-                title: Text(
-                  finalTitle,
-                  style: TextStyle(fontSize: 20.0),
-                ),
-                subtitle: Text(desc),
-                trailing: IconButton(
-                    icon: (completed)
-                        ? Icon(
-                      Icons.done_outline,
-                      color: Colors.green,
-                      size: 20.0,
-                    )
-                        : Icon(Icons.done, color: Colors.grey, size: 20.0),
-                    onPressed: () {
-                      updateTodo(_monthlyToDo[index]);
-                    }),
+              child: Card(
+                child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      ListTile(
+                        leading: listTileCheck(_todoList[index].priorty),
+                        title: Text(
+                          title,
+                          style: TextStyle(fontSize: 20.0),
+                        ),
+                        subtitle: Text(desc),
+                      ),
+                      ButtonBar(
+                        children: <Widget>[
+                          FlatButton(
+                            child:  Text(date),
+                            onPressed: () { /* ... */ },
+                          ),
+                          IconButton(
+                              icon: (completed)
+                                  ? Icon(
+                                Icons.done_outline,
+                                color: Colors.green,
+                                size: 20.0,
+                              )
+                                  : Icon(Icons.done, color: Colors.grey, size: 20.0),
+                              onPressed: () {
+                                updateTodo(_todoList[index]);
+                              }),
+                        ],
+                      ),
+                    ]),
               ),
             );
           });
