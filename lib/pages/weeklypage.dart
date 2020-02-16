@@ -114,18 +114,26 @@ class WeeklyTask extends State<WeeklyPage> {
 
 
   Widget showTodoList() {
+
     List _weeklyToDo = new List();
+
     print(_todoList.length);
-    DateTime now = DateTime.now();
+
     String nowTimeSplit = DateTime.now().toString().substring(8,10);
+    print(nowTimeSplit);
     var nowTimeInt = int.parse(nowTimeSplit);
 
     for (var i = 0; i < _todoList.length; i++) {
       String firstSplit = _todoList[i].date.substring(8,10);
       var day = int.parse(firstSplit);
 
-      if((day - nowTimeInt) < 7 ){
+      if((day - nowTimeInt) < 7 && (day - nowTimeInt) > 0 ){
         _weeklyToDo.add(_todoList[i]);
+
+        print("day" + '$day');
+        print("nowTimeInt" + '$nowTimeInt');
+        print("difference");
+        print(day - nowTimeInt);
 
       }
 
@@ -136,6 +144,7 @@ class WeeklyTask extends State<WeeklyPage> {
           shrinkWrap: true,
           itemCount: _weeklyToDo.length,
           itemBuilder: (BuildContext context, int index) {
+
             String todoId = _weeklyToDo[index].key;
             String title = _weeklyToDo[index].title;
             String desc = _weeklyToDo[index].description;
