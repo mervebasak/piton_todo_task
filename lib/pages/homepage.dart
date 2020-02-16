@@ -199,69 +199,63 @@ class _HomePageState extends State<HomePage> {
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
-              DrawerHeader(
-                child: Text('Menu', style: TextStyle(fontSize: 40.0), textAlign: TextAlign.center,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.blue,
-                ),
-              ),
-
-              Card(
-                child: ListTile(
-                  title: Text('Daily Plans'),
-                  leading: const Icon(Icons.today),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => DailyPage()),
-                    );
-
-                  },
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: Text('Weekly Plans'),
-                  leading: const Icon(Icons.insert_invitation),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => WeeklyPage()),
-                    );
-                  },
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: Text('Monthly Plans'),
-                  leading: const Icon(Icons.calendar_today),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MonthlyPage()),
-                    );
-                  },
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  title: Text('Completed Plans'),
-                  leading: const Icon(Icons.check_circle),
-                  onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => CompletedPage()),
-                    );
-                  },
+              UserAccountsDrawerHeader(
+                accountName: Text("Piton ARGE ve Yazılım Evi"),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: AssetImage("assets/piton.jpg"),
                 ),
               ),
 
+              ListTile(
+                leading: Icon(Icons.today),
+                title: Text("Daily plans"),
+                onTap: (){
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DailyPage()),
+                  );
+                },
+              ),
+              Divider(),
 
+              ListTile(
+                leading: Icon(Icons.insert_invitation),
+                title: Text("Weekly plans"),
+                onTap: (){
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => WeeklyPage()),
+                  );
+                },
+              ),
+              Divider(),
+
+              ListTile(
+                leading: Icon(Icons.calendar_today),
+                title: Text("Monthly plans"),
+                onTap: (){
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MonthlyPage()),
+                  );
+                },
+              ),
+              Divider(),
+
+              ListTile(
+                leading: Icon(Icons.check_circle),
+                title: Text("Completed plans"),
+                onTap: (){
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CompletedPage()),
+                  );
+                },
+              ),
+              Divider(),
             ],
           ),
         ),
