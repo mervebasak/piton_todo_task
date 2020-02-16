@@ -142,6 +142,7 @@ class _HomePageState extends State<HomePage> {
             String date = _todoList[index].date;
             bool completed = _todoList[index].completed;
             String userId = _todoList[index].userId;
+            String finalTitle = '$title' +"   "+ '$date';
             return Dismissible(
               key: Key(todoId),
               background: Container(color: Colors.red),

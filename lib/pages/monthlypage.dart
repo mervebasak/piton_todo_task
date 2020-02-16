@@ -138,14 +138,15 @@ class MonthlyTask extends State<MonthlyPage> {
     if (_monthlyToDo.length > 0) {
       return ListView.builder(
           shrinkWrap: true,
-          itemCount: _todoList.length,
+          itemCount: _monthlyToDo.length,
           itemBuilder: (BuildContext context, int index) {
-            String todoId = _todoList[index].key;
-            String title = _todoList[index].title;
-            String desc = _todoList[index].description;
-            String date = _todoList[index].date;
-            bool completed = _todoList[index].completed;
-            String userId = _todoList[index].userId;
+            String todoId = _monthlyToDo[index].key;
+            String title = _monthlyToDo[index].title;
+            String desc = _monthlyToDo[index].description;
+            String date = _monthlyToDo[index].date;
+            bool completed = _monthlyToDo[index].completed;
+            String userId = _monthlyToDo[index].userId;
+            String finalTitle = '$title' +"   "+ '$date';
             return Dismissible(
               key: Key(todoId),
               background: Container(color: Colors.red),
@@ -157,7 +158,7 @@ class MonthlyTask extends State<MonthlyPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       ListTile(
-                        leading: listTileCheck(_todoList[index].priorty),
+                        leading: listTileCheck(_monthlyToDo[index].priorty),
                         title: Text(
                           title,
                           style: TextStyle(fontSize: 20.0),
@@ -179,7 +180,7 @@ class MonthlyTask extends State<MonthlyPage> {
                               )
                                   : Icon(Icons.done, color: Colors.grey, size: 20.0),
                               onPressed: () {
-                                updateTodo(_todoList[index]);
+                                updateTodo(_monthlyToDo[index]);
                               }),
                         ],
                       ),
@@ -202,7 +203,7 @@ class MonthlyTask extends State<MonthlyPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Weekly Plans Page'),
+        title: new Text('Monthly Plans Page'),
       ),
       body: showTodoList(),
 

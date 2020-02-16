@@ -134,14 +134,15 @@ class WeeklyTask extends State<WeeklyPage> {
     if (_weeklyToDo.length > 0) {
       return ListView.builder(
           shrinkWrap: true,
-          itemCount: _todoList.length,
+          itemCount: _weeklyToDo.length,
           itemBuilder: (BuildContext context, int index) {
-            String todoId = _todoList[index].key;
-            String title = _todoList[index].title;
-            String desc = _todoList[index].description;
-            String date = _todoList[index].date;
-            bool completed = _todoList[index].completed;
-            String userId = _todoList[index].userId;
+            String todoId = _weeklyToDo[index].key;
+            String title = _weeklyToDo[index].title;
+            String desc = _weeklyToDo[index].description;
+            String date = _weeklyToDo[index].date;
+            bool completed = _weeklyToDo[index].completed;
+            String userId = _weeklyToDo[index].userId;
+            String finalTitle = '$title' +"   "+ '$date';
             return Dismissible(
               key: Key(todoId),
               background: Container(color: Colors.red),
@@ -153,7 +154,7 @@ class WeeklyTask extends State<WeeklyPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       ListTile(
-                        leading: listTileCheck(_todoList[index].priorty),
+                        leading: listTileCheck(_weeklyToDo[index].priorty),
                         title: Text(
                           title,
                           style: TextStyle(fontSize: 20.0),
@@ -175,7 +176,7 @@ class WeeklyTask extends State<WeeklyPage> {
                               )
                                   : Icon(Icons.done, color: Colors.grey, size: 20.0),
                               onPressed: () {
-                                updateTodo(_todoList[index]);
+                                updateTodo(_weeklyToDo[index]);
                               }),
                         ],
                       ),
